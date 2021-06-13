@@ -3,7 +3,7 @@ package propertybasedtests
 import "strings"
 
 type RomanNumeral struct {
-	Value  int
+	Value  uint16
 	Symbol string
 }
 
@@ -17,7 +17,7 @@ var allRomanNumerals = []RomanNumeral{
 	{1, "I"},
 }
 
-func ValueOf(symbols ...byte) int {
+func ValueOf(symbols ...byte) uint16 {
 	symbol := string(symbols)
 	for _, r := range allRomanNumerals {
 		if r.Symbol == symbol {
@@ -27,7 +27,7 @@ func ValueOf(symbols ...byte) int {
 	return 0
 }
 
-func ConvertToRoman(num int) string {
+func ConvertToRoman(num uint16) string {
 	var result strings.Builder
 
 	for _, numeral := range allRomanNumerals {
@@ -39,8 +39,8 @@ func ConvertToRoman(num int) string {
 	return result.String()
 }
 
-func ConvertToNumber(roman string) int {
-	total := 0
+func ConvertToNumber(roman string) uint16 {
+	var total uint16
 
 	for i := 0; i < len(roman); i++ {
 		symbol := roman[i]

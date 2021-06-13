@@ -2,11 +2,13 @@ package propertybasedtests
 
 import (
 	"fmt"
+	"log"
 	"testing"
+	"testing/quick"
 )
 
 var tests = []struct {
-	Number int
+	Number uint16
 	Roman  string
 }{
 	{1, "I"},
@@ -47,5 +49,21 @@ func TestConvertingRomanToNumber(t *testing.T) {
 				t.Errorf("want %q, got %d", test.Roman, got)
 			}
 		})
+	}
+}
+
+func TestPropertiesOfConversion(t *testing.T) {
+	assertion := func(number uint16) bool {
+		if number > 3999 {
+			return true
+		}
+		log.Println("testing: ", number)
+		roman := ConvertToRoman(number)
+		numberFromRoman := ConvertToNumber(roman)
+		return numberFromRoman == number
+	}
+
+	if err := quick.Check(assertion, nil); err != nil {
+		t.Error("failed checks", err)
 	}
 }
