@@ -17,6 +17,16 @@ var allRomanNumerals = []RomanNumeral{
 	{1, "I"},
 }
 
+func ValueOf(symbols ...byte) int {
+	symbol := string(symbols)
+	for _, r := range allRomanNumerals {
+		if r.Symbol == symbol {
+			return r.Value
+		}
+	}
+	return 0
+}
+
 func ConvertToRoman(num int) string {
 	var result strings.Builder
 
@@ -27,4 +37,33 @@ func ConvertToRoman(num int) string {
 		}
 	}
 	return result.String()
+}
+
+func ConvertToNumber(roman string) int {
+	total := 0
+
+	for i := 0; i < len(roman); i++ {
+		symbol := roman[i]
+
+		if couldBeSubstractive(i, symbol, roman) {
+			nextSymbol := roman[i+1]
+
+			if value := ValueOf(symbol, nextSymbol); value != 0 {
+				total += value
+				i++
+			} else {
+				total += ValueOf(symbol)
+			}
+		} else {
+			total += ValueOf(symbol)
+		}
+	}
+
+	return total
+
+}
+
+func couldBeSubstractive(i int, symbol uint8, roman string) bool {
+	isSubstractive := symbol == 'I' || symbol == 'X' || symbol == 'C'
+	return isSubstractive && i+1 < len(roman)
 }
